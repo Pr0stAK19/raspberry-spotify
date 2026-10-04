@@ -31,8 +31,8 @@ services:
       - -s3.config=/etc/seaweedfs/s3-config.json
     ports:
       - "8333:8333" # s3 API
-      - "9333:9333" #bMaster UI
-      - "8888:8888" #File UI
+      - "9333:9333" # Master UI
+      - "8888:8888" # Filer UI
     volumes:
       - seaweedfs_data:/data
       - ./seaweedfs/s3-config.json:/etc/seaweedfs/s3-config.json:ro
