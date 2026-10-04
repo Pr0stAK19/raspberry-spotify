@@ -1,0 +1,20 @@
+{
+  "identities": [
+    {
+      "name": "spotifu-admin",
+      "credentials": [
+        {
+          "accesKey": "spotify_acces_key",
+          "secretKey": "spotify_secret_key"
+        }
+      ],
+      "actions": [
+        "Admin",
+        "Read",
+        "Write",
+        "List",
+        "Tagging"
+      ]
+    }
+  ]
+}
