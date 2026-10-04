@@ -1,10 +1,10 @@
 {
   "identities": [
     {
-      "name": "spotifu-admin",
+      "name": "spotify-admin",
       "credentials": [
         {
-          "accesKey": "spotify_acces_key",
+          "accessKey": "spotify_acces_key",
           "secretKey": "spotify_secret_key"
         }
       ],
