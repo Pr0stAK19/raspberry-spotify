@@ -55,7 +55,7 @@ services:
       - -c
       - |
         echo "Waiting for SeaweedFS...";
-        until wget -q -O - http://seaweedfs:9333/cluster/status | grep -q "leader"; do sleep 2; done;
+        until wget -q --spider http://seaweedfs:9333/cluster/status; do sleep 2; done;
         echo "Creating bucket 'spotify-media'...";
         echo 's3.bucket.create -name=spotify-media' | weed shell -master=seaweedfs:9333
         echo "Bucket created"
