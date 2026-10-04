@@ -35,7 +35,7 @@ services:
       - "8888:8888" #File UI
     volumes:
       - seaweedfs_data:/data
-      - ./seaweedfs/s3-config/json:/etc/seaweedfs/s3-config.json:ro
+      - ./seaweedfs/s3-config.json:/etc/seaweedfs/s3-config.json:ro
     healthcheck:
       test: ["CMD", "wget", "--timeout=3", "--quiet", "--tries=1", "-O", "/dev/null", "http://127.0.0.1:9333/cluster/status"]
       interval: 10s
@@ -55,10 +55,10 @@ services:
       - -c
       - |
         echo "Waiting for SeaweedFS...";
-        until wget -q -O http://seaweedfs:9333/cluster/status | grep -q "leader"; do sleep 2; done;
+        until wget -q -O - http://seaweedfs:9333/cluster/status | grep -q "leader"; do sleep 2; done;
         echo "Creating bucket 'spotify-media'...";
-        echo 's3.bucket.create -name-spotify-media' | weed shell -master=seaweedfs:9333
-        echo "BUcket created"
+        echo 's3.bucket.create -name=spotify-media' | weed shell -master=seaweedfs:9333
+        echo "Bucket created"
     restart: "no"
 
   spotify-backend:
