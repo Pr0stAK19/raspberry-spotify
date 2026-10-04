@@ -44,7 +44,22 @@ services:
       start_period: 15s
     restart: unless-stopped
 
-
+  seaweedfs-init:
+    image: chrislusf/seaweedfs:latest
+    container_name: spotify-seaweedfs-init
+    depends_on:
+      seaweedfs:
+        condition: service_healthy
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        echo "Waiting for SeaweedFS...";
+        until wget -q -O http://seaweedfs:9333/cluster/status | grep -q "leader"; do sleep 2; done;
+        echo "Creating bucket 'spotify-media'...";
+        echo 's3.bucket.create -name-spotify-media' | weed shell -master=seaweedfs:9333
+        echo "BUcket created"
+    restart: "no"
 
   spotify-backend:
     build:
@@ -62,9 +77,19 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/spotify
       - SPRING_DATASOURCE_USERNAME=spotify
       - SPRING_DATASOURCE_PASSWORD=spotify
+      - S3_ENDPOINT=http://seaweedfs:8333
+      - S3_ACCESS_KEY=spotify_access_key
+      - S3_SECRET_KEY=spotify_secret_key
+      - S3_BUCKET=spotify-media
+      - S3_FORCE_PATH_STYLE=true
     depends_on:
       postgres:
         condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+      seaweedfs-init:
+        condition: service_completed_successfully
+
 
   spotify-search-node:
     build:
@@ -82,9 +107,19 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/spotify
       - SPRING_DATASOURCE_USERNAME=spotify
       - SPRING_DATASOURCE_PASSWORD=spotify
+      - S3_ENDPOINT=http://seaweedfs:8333
+      - S3_ACCESS_KEY=spotify_access_key
+      - S3_SECRET_KEY=spotify_secret_key
+      - S3_BUCKET=spotify-media
+      - S3_FORCE_PATH_STYLE=true
     depends_on:
       postgres:
         condition: service_healthy
+      seaweedfs:
+        condition: service_healthy
+      seaweedfs-init:
+        condition: service_completed_successfully
+
 
   spotify-frontend:
     image: node:20-alpine
@@ -102,3 +137,4 @@ services:
 
 volumes:
   postgres_data:
+  seaweedfs_data:
