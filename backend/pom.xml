@@ -33,15 +33,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>io.awsoring.cloud</groupId>
+				<groupId>io.awspring.cloud</groupId>
 				<artifactId>spring-cloud-aws-dependencies</artifactId>
-				<version>4.0.0</version>
+				<version>3.2.0</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>io.awsping.cloud</groupId>
-				<artifactId>spring-cloud-aws-starter-s3</artifactId>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
