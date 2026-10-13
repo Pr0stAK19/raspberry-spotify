@@ -28,7 +28,7 @@ public class TrackStorageService {
         return key;
     }
 
-    public InputStream InputStream(String key) throws IOException {
+    public InputStream openStream(String key) throws IOException {
         return s3Template.download(properties.getBucket(), key).getInputStream();
     }
 
